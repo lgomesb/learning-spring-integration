@@ -1,0 +1,48 @@
+version: "3"
+
+services: 
+    api:
+        build: .
+        container_name: customermanagement
+        ports: 
+            - "9090:9090"
+        networks: 
+            - frontend
+            - backend
+        environment: 
+            - "USER_DATABASE=mysql"
+            - "PASSWORD_DATABASE=123456"
+            - "ENVIRONMENT=prod"
+        restart: always
+
+    db: 
+        image: mysql
+        container_name: mysql-customermanagement
+        networks: 
+            - backend
+        environment:            
+            - "MYSQL_ROOT_PASSWORD=102030"
+            - "MYSQL_USER=mysql"
+            - "MYSQL_PASSWORD=123456"
+            - "MYSQL_DATABASE=customermanagement"
+        volumes: 
+            - /volume/customermanagement/mysql:/var/lib/mysql
+        ports: 
+            - "4417:3306"
+        restart: always
+
+networks: 
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge
+		
+############## ######################################################
+		
+docker run --name mysql --restart always -itd --env MYSQL_ROOT_PASSWORD=102030 -v /volume/mysql:/var/lib/mysql -p 3306:3306 mysql 
+
+
+
+
+
+	
